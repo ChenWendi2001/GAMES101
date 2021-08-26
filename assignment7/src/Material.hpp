@@ -7,7 +7,7 @@
 
 #include "Vector.hpp"
 
-enum MaterialType { DIFFUSE};
+enum MaterialType { DIFFUSE, MICROFACET};
 
 class Material{
 private:
@@ -85,6 +85,31 @@ private:
         return a.x * B + a.y * C + a.z * N;
     }
 
+    float D_GGX(Vector3f N, Vector3f H, float alpha){
+        float a2 = alpha * alpha;
+        float NdotH = std::max(dotProduct(N,H),0.0f);
+        float NdotH2 = NdotH * NdotH;
+
+        float nom = a2;
+        float denom = (NdotH2*(a2-1.0)+1.0);
+        denom = M_PI * denom *denom;
+
+        return nom/denom;
+    }
+
+    float G_GGX(float Ndot, float alpha){
+        float k = (alpha+1)*(alpha+1)/8;
+
+        return Ndot/(Ndot*(1-k)+k);
+    }
+
+    float G_Smith(Vector3f N, Vector3f wi, Vector3f wo, float alpha){
+        float NdotI = std::max(dotProduct(N,wi),0.0f);
+        float NdotO = std::max(dotProduct(N,wo),0.0f);
+
+        return G_GGX(NdotI,alpha)*G_GGX(NdotO,alpha);
+    }
+
 public:
     MaterialType m_type;
     //Vector3f m_color;
@@ -131,6 +156,7 @@ Vector3f Material::getColorAt(double u, double v) {
 
 Vector3f Material::sample(const Vector3f &wi, const Vector3f &N){
     switch(m_type){
+        case MICROFACET:
         case DIFFUSE:
         {
             // uniform sample on the hemisphere
@@ -147,6 +173,7 @@ Vector3f Material::sample(const Vector3f &wi, const Vector3f &N){
 
 float Material::pdf(const Vector3f &wi, const Vector3f &wo, const Vector3f &N){
     switch(m_type){
+        case MICROFACET:
         case DIFFUSE:
         {
             // uniform sample probability 1 / (2 * PI)
@@ -168,6 +195,22 @@ Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &
             if (cosalpha > 0.0f) {
                 Vector3f diffuse = Kd / M_PI;
                 return diffuse;
+            }
+            else
+                return Vector3f(0.0f);
+            break;
+        }
+        case MICROFACET:
+        {
+            float cosalpha = dotProduct(N, wo);
+            if (cosalpha > 0.0f) {
+                Vector3f diffuse = Kd / M_PI;
+                // Ks = Vector3f(1,1,1)-Kd;
+                // std::cout<<Ks<<std::endl;
+                float F;
+                fresnel(wi,N,ior,F);
+                Vector3f H = (wi+wo).normalized();
+                return D_GGX(N,H,0.02) * Vector3f(F,F,F) * G_Smith(N,wi,wo,0.02)/(4 * dotProduct(wo,N) * dotProduct(wi,N)) + Vector3f(1-F,1-F,1-F)/M_PI ;
             }
             else
                 return Vector3f(0.0f);

@@ -84,7 +84,7 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
 
     Ray p_to_x(p,ws);
     if((p-x).norm()-intersect(p_to_x).distance < 0.00016f)
-        L_dir = emit * inter.m->eval(wo,ws,N) * dotProduct(ws,N) * dotProduct(-ws, NN)/(p-x).norm()/(p-x).norm()/pdf_light;
+        L_dir = emit * inter.m->eval(-wo,ws,N) * dotProduct(ws,N) * dotProduct(-ws, NN)/(p-x).norm()/(p-x).norm()/pdf_light;
     
     if(get_random_float()>RussianRoulette) return L_dir;
 
@@ -92,7 +92,7 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
     Ray r(p,wi);
     Intersection object = intersect(r);
     if(object.happened && !object.m->hasEmission()){
-        L_indir = castRay(r,depth+1) * inter.m->eval(wo,wi,N) * dotProduct(wi, N) / inter.m->pdf(wo,wi,N) / RussianRoulette;
+        L_indir = castRay(r,depth+1) * inter.m->eval(-wo,wi,N) * dotProduct(wi, N) / inter.m->pdf(wo,wi,N) / RussianRoulette;
     }
     return L_dir + L_indir;
 

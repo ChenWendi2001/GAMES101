@@ -25,7 +25,7 @@ void Renderer::Render(const Scene& scene)
     int m = 0;
 
     // change the spp value to change sample ammount
-    int spp = 512;
+    int spp = 1024;
     std::cout << "SPP: " << spp << "\n";
     omp_set_num_threads(6);
     #pragma omp parallel for
@@ -45,8 +45,9 @@ void Renderer::Render(const Scene& scene)
         # pragma omp critical
         {
             m++;
+            UpdateProgress(m / (float)scene.height);
         }
-        UpdateProgress(m / (float)scene.height);
+        // UpdateProgress(m / (float)scene.height);
         // UpdateProgress(j / (float)scene.height);
     }
     UpdateProgress(1.f);
