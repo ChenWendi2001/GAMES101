@@ -210,7 +210,7 @@ Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &
                 float F;
                 fresnel(wi,N,ior,F);
                 Vector3f H = (wi+wo).normalized();
-                return D_GGX(N,H,0.02) * Vector3f(F,F,F) * G_Smith(N,wi,wo,0.02)/(4 * dotProduct(wo,N) * dotProduct(wi,N)) + Vector3f(1-F,1-F,1-F)/M_PI ;
+                return D_GGX(N,H,0.4) * Vector3f(F,F,F) * G_Smith(N,wi,wo,0.4)/(4 * dotProduct(wo,N) * dotProduct(wi,N)) + Vector3f(1-F,1-F,1-F)/M_PI ;
             }
             else
                 return Vector3f(0.0f);
