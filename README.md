@@ -1,5 +1,10 @@
 # GAMES101
 My solutions to GAMES101: Introduction to Computer Graphics. 🎨
+<figure class="pic">
+    <img src="./images/texture.png"height="200">
+    <img src="./images/ray_tracing_ball.png"height="200">
+    <img src="./images/path_tracing.png"height="200">
+</figure>
 
 | Assignment     | Content |
 | ----------- | ----------- |
