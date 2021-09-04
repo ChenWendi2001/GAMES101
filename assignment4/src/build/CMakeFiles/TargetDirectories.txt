@@ -1,3 +1,0 @@
-/home/cs18/Desktop/GAMES101/assignment4/src/build/CMakeFiles/rebuild_cache.dir
-/home/cs18/Desktop/GAMES101/assignment4/src/build/CMakeFiles/BezierCurve.dir
-/home/cs18/Desktop/GAMES101/assignment4/src/build/CMakeFiles/edit_cache.dir
