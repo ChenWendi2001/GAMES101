@@ -1,9 +1,9 @@
 # GAMES101
 My solutions to GAMES101: Introduction to Computer Graphics. 🎨
 <center class="pic">
-    <img src="./images/texture.png"height="160">
-    <img src="./images/ray_tracing_ball.png"height="160">
-    <img src="./images/path_tracing.png"height="160">
+    <!-- <img src="./images/texture.png"height="160"> -->
+    <!-- <img src="./images/ray_tracing_ball.png"height="160"> -->
+    <img src="./images/path_tracing.png"height="300">
 </center>
 
 | Assignment     | Content |
